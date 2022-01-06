@@ -21,8 +21,22 @@ const Layout = ({input, previews, submitButton, dropzoneProps, files, extra: {ma
         {files.length > 0 && submitButton}
       </div>
 
-      <div id="preview">
+      <div id="div2">
         {previews}
+      </div>
+    </div>
+  )
+}
+
+const LayoutThing = ({imageClass, meta}) => {
+  const {name, previewUrl, percent, status, size} = meta
+  return (
+    <div id="div2">
+      <div id="div1">
+        <p>{name}</p>
+        <div id="preview">
+          <img src={previewUrl}/>
+        </div>
       </div>
     </div>
   )
@@ -62,6 +76,7 @@ const Uploader = () => {
       multiple = {true}
       canCancel = {true}
       LayoutComponent={Layout}
+      PreviewComponent={LayoutThing}
       classNames={{inputLabelWithFiles: defaultClassNames.inputLabel}}
       inputContent = {(files, extra) => (extra.reject ? 'Only images are allowed !' : "Drop Files or Click to browse")}
       styles = {{
