@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #ff008c;
+  background-color: #1e1b4d;
 }
 
 .App-logo {
@@ -17,17 +17,10 @@
 #div1{
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content:flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-#div2{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 100px;
 }
 
 #uploader{
@@ -50,11 +43,7 @@
   flex-wrap: wrap;
   flex-grow: 1;
   justify-content: flex-start;
-}
 
-#preview img{
-  width: 200px;
-  height: 200px;
 }
 
 @keyframes App-logo-spin {

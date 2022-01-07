@@ -21,22 +21,8 @@ const Layout = ({input, previews, submitButton, dropzoneProps, files, extra: {ma
         {files.length > 0 && submitButton}
       </div>
 
-      <div id="div2">
+      <div id="preview">
         {previews}
-      </div>
-    </div>
-  )
-}
-
-const LayoutThing = ({imageClass, meta}) => {
-  const {name, previewUrl, percent, status, size} = meta
-  return (
-    <div id="div2">
-      <div id="div1">
-        <p>{name}</p>
-        <div id="preview">
-          <img src={previewUrl}/>
-        </div>
       </div>
     </div>
   )
@@ -51,8 +37,7 @@ const Uploader = () => {
   };
 
   const handleSubmit = async(files) => {
-    let ids = [];
-    for(var i=0; i < files.length; i++){
+    for(var i=0; files.length; i++){
       const f = files[i];
       //GET request for the presigned URL
       const response = await axios({
@@ -60,24 +45,13 @@ const Uploader = () => {
         url: API_ENDPOINT,
       });
 
-      ids.push(response.data.filename)
-
       //PUT request to upload the file to S3
+      console.log(f)
       const result = await fetch(response.data.uploadURL, {
         method: "PUT",
         body: f["file"],
       });
     }
-
-    let labels = [];
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    for(var i=0; i < ids.length; i++){
-      const response = await axios.get('https://yzb8v1kp53.execute-api.eu-central-1.amazonaws.com/label/get_label', {params: {id: ids[i]}})
-      console.log(response.data.body)
-      const response2 = JSON.parse(response.data.body)
-      console.log(response2.Item.Labels)
-    }
-    console.log("hey", ids)
   };
 
 
@@ -89,7 +63,7 @@ const Uploader = () => {
       multiple = {true}
       canCancel = {true}
       LayoutComponent={Layout}
-      PreviewComponent={LayoutThing}
+      //PreviewComponent={PreviewLayout}
       classNames={{inputLabelWithFiles: defaultClassNames.inputLabel}}
       inputContent = {(files, extra) => (extra.reject ? 'Only images are allowed !' : "Drop Files or Click to browse")}
       styles = {{
