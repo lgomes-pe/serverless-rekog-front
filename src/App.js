@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import "react-dropzone-uploader/dist/styles.css";
 import Dropzone, { defaultClassNames } from "react-dropzone-uploader";
 import axios from "axios";
+import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
 
 //Uploader layout
 const Layout = ({input, previews, submitButton, dropzoneProps, files, extra: {maxFiles}}) => {
@@ -11,8 +12,8 @@ const Layout = ({input, previews, submitButton, dropzoneProps, files, extra: {ma
     <div id="div1">
       <div id="uploader">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Uploader
+        <p id="app-name">
+          Serverless Rekognizer
         </p>
         <div {...dropzoneProps}>
           {files.length < maxFiles && input}
@@ -31,12 +32,12 @@ const Layout = ({input, previews, submitButton, dropzoneProps, files, extra: {ma
 const LayoutThing = ({imageClass, meta}) => {
   const {name, previewUrl, percent, status, size} = meta
   return (
-    <div id="div2">
-      <div id="div1">
-        <p>{name}</p>
+    <div id="preview_div2">
+      <div id="preview_div1">
         <div id="preview">
           <img src={previewUrl}/>
         </div>
+        <p>{name}</p>
       </div>
     </div>
   )
@@ -76,6 +77,7 @@ const Uploader = () => {
       console.log(response.data.body)
       const response2 = JSON.parse(response.data.body)
       console.log(response2.Item.Labels)
+      labels = response2.Item.Labels
     }
     console.log("hey", ids)
   };
@@ -85,7 +87,7 @@ const Uploader = () => {
     <Dropzone
       onChangeStatus = {handleChangeStatus}
       onSubmit = {handleSubmit}
-      maxFiles = {10}
+      maxFiles = {100}
       multiple = {true}
       canCancel = {true}
       LayoutComponent={Layout}
