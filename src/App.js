@@ -38,6 +38,7 @@ const LayoutThing = ({imageClass, meta}) => {
           <img src={previewUrl}/>
         </div>
         <p>{name}</p>
+        <p class="printlabels"></p>
       </div>
     </div>
   )
@@ -70,14 +71,32 @@ const Uploader = () => {
       });
     }
 
-    let labels = [];
+
     await new Promise(resolve => setTimeout(resolve, 2000));
+    var printlabels = document.getElementsByClassName("printlabels");
     for(var i=0; i < ids.length; i++){
-      const response = await axios.get('https://yzb8v1kp53.execute-api.eu-central-1.amazonaws.com/label/get_label', {params: {id: ids[i]}})
-      console.log(response.data.body)
-      const response2 = JSON.parse(response.data.body)
-      console.log(response2.Item.Labels)
-      labels = response2.Item.Labels
+      let labels = '';
+      const response = await axios.get('https://yzb8v1kp53.execute-api.eu-central-1.amazonaws.com/label/get_label', {params: {id: ids[i]}});
+      console.log(response.data.body);
+      const response2 = JSON.parse(response.data.body);
+      console.log(response2.Item.Labels);
+      const jsonlabels = response2.Item.Labels;
+      //labels = response2.Item.Labels.L[0].M.Name.S
+      for(var j=0;  j< 3; j++){
+        try{
+          labels = labels + jsonlabels.L[j].M.Name.S + ', ';
+        }
+        catch(e){
+          break;
+        }
+      }
+      //removing the comma for the last label
+      labels = labels.substring(0, labels.length - 2)
+      //labels = response2.Item.Labels.L[0].M.Name.S + ', ' +
+      //  response2.Item.Labels.L[1].M.Name.S + ', ' +
+      //  response2.Item.Labels.L[2].M.Name.S;
+      console.log('Labels : ', labels);
+      printlabels[i].textContent = labels;
     }
     console.log("hey", ids)
   };
